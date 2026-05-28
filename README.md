@@ -148,7 +148,7 @@ Engineering drawings: Appendix E and drawings/.
 
 ## Contact
 
-Continuation channel for future students. The team email alias and the GitHub issue tracker are listed in docs/contact.md. Add yours before the Summer Session so the next team can reach you.
+Continuation channel for future students. The team email alias is zcemcp0@ucl.ac.uk. The GitHub issue tracker on this repository is the other long-running channel. Full team and academic contacts are in docs/contact.md.
 
 ## Data and privacy
 

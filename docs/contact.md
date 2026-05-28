@@ -1,10 +1,10 @@
 # Contact and continuation channel
 
-TODO. Add the contact details before the Summer Session so the next team can reach the original group.
-
 ## Team email alias
 
-TODO: shared team email or forwarding alias for the four authors. The address goes here once it is set up.
+zcemcp0@ucl.ac.uk
+
+Shared forwarding alias for the four authors. Continuation MEng teams, clinical collaborators and researchers working on hypotony correction should write here in the first instance.
 
 ## Continuation channel
 

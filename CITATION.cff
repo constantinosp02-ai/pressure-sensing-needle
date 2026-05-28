@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite the project team."
+title: "Pressure-Sensing Injection Needle"
+authors:
+  - family-names: Papacharalambous
+    given-names: Constantinos
+    affiliation: "UCL Department of Mechanical Engineering"
+    role: "Team Leader"
+  - family-names: Landa Pulgar
+    given-names: Miguel
+    affiliation: "UCL Department of Mechanical Engineering"
+    role: "Treasurer"
+  - family-names: Cachon Delgado
+    given-names: Álvaro
+    affiliation: "UCL Department of Mechanical Engineering"
+  - family-names: Markides
+    given-names: Vasilis
+    affiliation: "UCL Department of Mechanical Engineering"
+version: 0.1.0
+date-released: "2026-05-28"
+license: MIT
+repository-code: "https://github.com/constantinosp02-ai/pressure-sensing-needle"

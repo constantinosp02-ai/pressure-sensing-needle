@@ -1,0 +1,1 @@
+TODO: KiCad schematic source plus a PDF export. The current build does not yet have a formal KiCad schematic. The pin allocation is reproduced in ../power_architecture.md and in firmware/pin_map.md from Tables 32 and 33 (Appendix A.6).

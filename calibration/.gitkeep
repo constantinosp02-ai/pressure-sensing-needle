@@ -1,0 +1,1 @@
+TODO: pointer to Handover Package/05_Calibration_data and Section 5.2.1. The folder should hold the bench-rig calibration CSVs at the four bottle heights, the hydrostatic offset record (sensor-to-needle height plus calculated offset), and the 30-second drift logs. The bubble removal protocol is in ./bubble_removal_protocol.md.

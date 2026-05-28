@@ -1,0 +1,1 @@
+TODO: vendored libraries (Honeywell MPRLS driver, stepper helper, I2C utilities) go here once the firmware source is added. See firmware/build_instructions.md.

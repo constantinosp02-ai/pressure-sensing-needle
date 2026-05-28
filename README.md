@@ -4,7 +4,7 @@ MECH0073 MEng Capstone Group Design Project, 2025/2026.
 Team: Constantinos Papacharalambous, Miguel Landa Pulgar, Álvaro Cachón Delgado, Vasilis Markides.
 Supervisor: Dr Abigail Wilson. Module Tutor: Dr Andrea Grech La Rosa.
 
-This README is the entry point to the handover package. It explains what the device does, how to set it up from cold, how to run the inject-pause-measure cycle, where the data lives, and what is left for the next team. Section references point back to the final report.
+This README is the entry point to the project repository. The wider Handover Package, including the final report PDF, the Fusion 360 cloud project, the raw test data and the physical-items checklist, lives in the team drive. This README explains what the device does, how to set it up from cold, how to run the inject-pause-measure cycle, where the data lives, and what is left for the next team. Section references point back to the final report.
 
 ## What it does
 
@@ -12,27 +12,29 @@ The device is a closed-loop pressure-sensing injection needle for the treatment 
 
 The control strategy is the inject-pause-measure cycle. The motor delivers a fixed 5 microlitre increment, the firmware pauses for 3 seconds to let flow transients settle, then averages 10 sensor readings to get the validated pause-state pressure. That validated value is the only number the controller trusts as true IOP. The cycle is described in full in Section 4.4.2.
 
-## What is in the package
+## What is in the repository
 
-Each folder corresponds to one of the artefacts listed in Section 8.3.
+Each top-level folder maps to one of the artefacts listed in Section 8.3 of the report.
 
 ```
-Handover Package/
-  README.md
-  Handover Checklist.md
-  01_CAD/                Fusion 360 model, STEP, STL, PDF render
-  02_Firmware/           Source code, dependency list, build notes
-  03_Electronics/        Wiring diagram, schematic, pin map, power architecture
-  04_BoM/                Bill of Materials, CSV and PDF
-  05_Calibration_data/   Bench rig calibration, hydrostatic offset, drift logs
-  06_Test_results/       Subsystem and integration test CSVs, iteration log
-  07_Risk_assessment/    Risk register, FMEA
-  08_Regulatory_standards/  PDS compliance table, standards mapping
-  09_Engineering_drawings/  Drawings exported from Fusion 360
-  10_Final_report/       Final report PDF
+pressure-sensing-needle/
+  README.md              You are here
+  CHANGELOG.md           Release notes (firmware tagging deferred to v1.0)
+  CITATION.cff           Citation metadata for the project team
+  LICENSE                MIT
+  bom/                   Bill of Materials, project reference 547914 (Appendix B)
+  cad/                   Fusion 360 model, STEP, STL, PDF render (Section 4.5.1, Figure 11)
+  calibration/           Bench rig calibration, hydrostatic offset, drift logs, bubble removal protocol (Section 5.2)
+  docs/                  Clinician workflow, known limitations, future work, contact
+  drawings/              Engineering drawings (Appendix E)
+  firmware/              ESP8266 source, pin map, state machine, build instructions (Section 4.4)
+  hardware/              Schematic, wiring diagram, power architecture (Section 4.4.1, Tables 32 and 33)
+  regulatory/            PDS compliance table, standards mapping (Appendices D and I)
+  risk/                  Risk register, FMEA (Appendix A)
+  test_results/          Subsystem and integration test CSVs, iteration log (Sections 5.2, 5.3, 5.4)
 ```
 
-The Handover Checklist.md file at the root tracks which items have been added.
+Several folders currently hold only a placeholder with a TODO pointing at the matching folder in the team-drive Handover Package. They will be populated as the team migrates the source code, schematics, BoM and test data into the repository ahead of the firmware v1.0 tag.
 
 ## Hardware setup
 
@@ -90,19 +92,19 @@ The firmware also enforces a maximum cumulative step count of about 560 steps, w
 
 ## How to run a bench-rig cycle
 
-First time setup. Print the syringe stand from the STL in 01_CAD. Wire the electronics according to the pin map and the wiring diagram in 03_Electronics. Set the DRV8825 Vref before plugging the motor in. Set M0, M1, M2 all HIGH for 1/32 microstepping.
+First time setup. Print the syringe stand from the STL under cad/ (or from the Fusion 360 cloud project listed in cad/fusion_link.md). Wire the electronics according to firmware/pin_map.md and the wiring diagram under hardware/wiring/. Set the DRV8825 Vref before plugging the motor in. Set M0, M1, M2 all HIGH for 1/32 microstepping.
 
 Each run. Load the 20 mL syringe with the test fluid. Open all stopcock ports. Prime the fluid path and remove bubbles (this matters, see drift discussion below). Set the needle outlet so it is open to reference pressure at the same vertical height as the sensor during baseline. Connect the ESP8266 to the host computer over USB. Open a serial monitor at 115200 baud.
 
 Power on or reset the ESP8266 so the BASELINE phase runs. Wait for the firmware to report WAIT_START. Insert the needle using standard ophthalmic technique. Send `s` over the serial monitor. The system delivers a 5 microlitre increment, pauses 3 seconds, averages 10 readings, then either pushes again, holds at 50 mmHg, or stops at 60 mmHg.
 
-The firmware streams a CSV log over the same serial link. Each row reports time in milliseconds, corrected pressure in mmHg, cumulative step count, and current phase (Section 4.4.4). Save the CSV for each run into 06_Test_results.
+The firmware streams a CSV log over the same serial link. Each row reports time in milliseconds, corrected pressure in mmHg, cumulative step count, and current phase (Section 4.4.4). Save the CSV for each run under test_results/subsystem/ for bench-rig data, or test_results/integration/ for full closed-loop or pig-eye workflow runs.
 
 ## Hydrostatic offset, how to re-zero
 
 The sensor sits below the needle tip. With the tip 80 mm above the sensor, the sensor reads 5.71 mmHg higher than the true IOP. The firmware subtracts a fixed offset of 5.71 mmHg from every gauge reading before the controller or the display use it (Section 4.2.3).
 
-The offset scales linearly with height at 0.071 mmHg per millimetre. If you change the assembly so the sensor to needle height shifts, measure the new height, recalculate the offset, and update the firmware constant. A height uncertainty of plus or minus 5 mm gives an offset uncertainty of about plus or minus 0.36 mmHg, which is inside the BFSL margin, so a careful millimetre rule is enough. Record the measured height and the calculated offset in 05_Calibration_data so the next team can verify it.
+The offset scales linearly with height at 0.071 mmHg per millimetre. If you change the assembly so the sensor to needle height shifts, measure the new height, recalculate the offset, and update the firmware constant. A height uncertainty of plus or minus 5 mm gives an offset uncertainty of about plus or minus 0.36 mmHg, which is inside the BFSL margin, so a careful millimetre rule is enough. Record the measured height and the calculated offset under calibration/ so the next team can verify it.
 
 ## Calibration, how it was done and how to re-run
 
@@ -138,15 +140,15 @@ Tier 3, follow-on student projects (Section 10). In-line or near-tip pressure tr
 
 Final report PDF: not committed to this repository, since it is the Moodle submission. The PDF lives in the team drive copy of the Handover Package, under 10_Final_report. Section numbers used throughout this README and the docs in this repository refer to that PDF.
 Pin map: Table 33 in Appendix A.6 of the report, also reproduced above.
-BoM, project reference 547914: Appendix B of the report and 04_BoM.
+BoM, project reference 547914: Appendix B of the report and bom/.
 FMEA: Table 29 in Appendix A.3.
 PDS compliance: Appendix D.
 Standards mapping (ISO 10993, IEC 62304, IEC 60601-1, UK MDR 2002, UK GDPR): Table 40 in Appendix I.
-Engineering drawings: Appendix E and 09_Engineering_drawings.
+Engineering drawings: Appendix E and drawings/.
 
 ## Contact
 
-Continuation channel for future students. The team email alias and the Git repository issue tracker are listed at the bottom of the Handover Checklist file. Add yours before the Summer Session so the next team can reach you.
+Continuation channel for future students. The team email alias and the GitHub issue tracker are listed in docs/contact.md. Add yours before the Summer Session so the next team can reach you.
 
 ## Data and privacy
 
